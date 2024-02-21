@@ -1,0 +1,1 @@
+Allure отчёт хранится по пути: target/reports/allure-reports
