@@ -12,6 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -24,7 +25,6 @@ import java.util.stream.Stream;
 public class CalcTests {
     private static WebDriver driver;
     private static final String mainLink = "https://www.google.com/search?q=калькулятор";
-    private static WebDriverWait wait;
 
     //parameters
     private static Stream<Arguments> calcParams() {
@@ -70,14 +70,17 @@ public class CalcTests {
         //timeouts
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
-        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         //go to google calculator page
         driver.get(mainLink);
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(webDriver -> ((JavascriptExecutor) driver).
+                executeScript("return document.readyState").equals("complete"));
     }
 
     @AfterEach
     public void afterEach() {
         driver.navigate().refresh();
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(webDriver -> ((JavascriptExecutor) driver).
+                executeScript("return document.readyState").equals("complete"));
     }
 
     @AfterAll
